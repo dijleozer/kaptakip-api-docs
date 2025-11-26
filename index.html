@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kaptakip API Documentation</title>
+
+  <!-- Google Material Symbols (ikon seti A) -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f7fb;
+      color: #111827;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ========== SIDEBAR ========== */
+    .sidebar {
+      width: 260px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      border-right: 1px solid #1f2937;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-logo span {
+      color: white;
+    }
+
+    .sidebar-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .sidebar-subtitle {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #9ca3af;
+      margin: 16px 0 6px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      color: #d1d5db;
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .nav-link span.material-symbols-outlined {
+      font-size: 18px;
+      color: #9ca3af;
+    }
+
+    .nav-link:hover {
+      background: #1f2937;
+      color: #ffffff;
+    }
+
+    .nav-link.active {
+      background: #1d4ed8;
+      color: #ffffff;
+      border-left-color: #60a5fa;
+    }
+
+    .nav-link.active span.material-symbols-outlined {
+      color: #bfdbfe;
+    }
+
+    /* ========== CONTENT ========== */
+    .content {
+      flex: 1;
+      padding: 32px 40px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      margin-bottom: 24px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 16px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .page-subtitle {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    section {
+      padding: 32px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+      padding-bottom: 64px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h3 {
+      font-size: 15px;
+      margin: 18px 0 6px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #4b5563;
+      margin-bottom: 8px;
+    }
+
+    .endpoint-meta {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-left: 6px;
+    }
+
+    .badge-get {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .badge-post {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .badge-role-personel {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-role-admin {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    pre {
+      background: #020617;
+      color: #e5e7eb;
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      overflow-x: auto;
+      margin: 8px 0 16px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      border: 1px solid #1f2937;
+    }
+
+    code {
+      font-family: inherit;
+      background: #e5e7eb;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 16px;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    th {
+      background: #f3f4f6;
+      font-weight: 500;
+    }
+
+    .role-table td:first-child {
+      font-weight: 500;
+      width: 160px;
+    }
+
+    .tag-allowed {
+      color: #16a34a;
+      font-weight: 600;
+    }
+
+    .tag-denied {
+      color: #b91c1c;
+      font-weight: 600;
+    }
+
+    /* Sticky scroll offset fix for anchor jumps */
+    section::before {
+      content: "";
+      display: block;
+      height: 72px;
+      margin-top: -72px;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Small screens */
+    @media (max-width: 900px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        border-right: none;
+        border-bottom: 1px solid #1f2937;
+      }
+      .content {
+        padding: 20px 16px 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <span class="material-symbols-outlined">badge</span>
+      </div>
+      <div>
+        <div class="sidebar-title">kaptakip API</div>
+        <div class="sidebar-subtitle">Personel Takip Sistemi</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-title">Genel</div>
+    <a class="nav-link" data-target="intro">
+      <span class="material-symbols-outlined">description</span>
+      <span>Introduction</span>
+    </a>
+
+    <div class="sidebar-section-title">Authentication</div>
+    <a class="nav-link" data-target="auth-login">
+      <span class="material-symbols-outlined">login</span>
+      <span>POST /api/auth/login</span>
+    </a>
+    <a class="nav-link" data-target="auth-me">
+      <span class="material-symbols-outlined">person</span>
+      <span>GET /api/auth/me</span>
+    </a>
+
+    <div class="sidebar-section-title">Saha Personeli</div>
+    <a class="nav-link" data-target="entries-create">
+      <span class="material-symbols-outlined">add_circle</span>
+      <span>POST /api/entries</span>
+    </a>
+    <a class="nav-link" data-target="entries-my">
+      <span class="material-symbols-outlined">history</span>
+      <span>GET /api/entries/my</span>
+    </a>
+    <a class="nav-link" data-target="entries-summary">
+      <span class="material-symbols-outlined">monitoring</span>
+      <span>GET /api/entries/my-summary</span>
+    </a>
+
+    <div class="sidebar-section-title">Yönetici – Entries</div>
+    <a class="nav-link" data-target="entries-all">
+      <span class="material-symbols-outlined">list_alt</span>
+      <span>GET /api/entries</span>
+    </a>
+    <a class="nav-link" data-target="entries-id">
+      <span class="material-symbols-outlined">search</span>
+      <span>GET /api/entries/{id}</span>
+    </a>
+
+    <div class="sidebar-section-title">Yönetici – Reports</div>
+    <a class="nav-link" data-target="reports-summary">
+      <span class="material-symbols-outlined">insights</span>
+      <span>GET /reports/entries-summary</span>
+    </a>
+    <a class="nav-link" data-target="reports-date">
+      <span class="material-symbols-outlined">calendar_month</span>
+      <span>GET /reports/entries-by-date</span>
+    </a>
+    <a class="nav-link" data-target="reports-officer">
+      <span class="material-symbols-outlined">group</span>
+      <span>GET /reports/entries-by-officer</span>
+    </a>
+    <a class="nav-link" data-target="reports-method">
+      <span class="material-symbols-outlined">camera_enhance</span>
+      <span>GET /reports/entries-by-method</span>
+    </a>
+
+    <div class="sidebar-section-title">Yönetici – Users</div>
+    <a class="nav-link" data-target="users">
+      <span class="material-symbols-outlined">supervisor_account</span>
+      <span>GET /api/users</span>
+    </a>
+
+    <div class="sidebar-section-title">Errors</div>
+    <a class="nav-link" data-target="errors-http">
+      <span class="material-symbols-outlined">error</span>
+      <span>HTTP Status Codes</span>
+    </a>
+    <a class="nav-link" data-target="errors-custom">
+      <span class="material-symbols-outlined">warning</span>
+      <span>Custom Error Codes</span>
+    </a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <header class="page-header">
+      <div class="page-title">Kaptakip API Documentation</div>
+      <div class="page-subtitle">
+        Saha personeli ve yönetici rollerine göre ayrılmış, REST tabanlı servis dokümantasyonu.
+      </div>
+    </header>
+
+    <!-- INTRO -->
+    <section id="intro">
+      <h2>
+        <span class="material-symbols-outlined">description</span>
+        Introduction
+      </h2>
+      <p>
+        Bu doküman, <strong>kaptakip Personel Takip Sistemi</strong> için geliştirilen backend servislerini
+        açıklamak amacıyla hazırlanmıştır. Sistem iki temel role sahiptir:
+        <strong>Saha Personeli</strong> ve <strong>Yönetici</strong>. Giriş işlemi tek bir login ekranı
+        üzerinden yapılır; rol bilgisi backend tarafından belirlenir ve yanıt olarak döndürülür.
+      </p>
+      <p>
+        Tüm korumalı endpointler için isteklerde
+        <code>Authorization: Bearer &lt;token&gt;</code> başlığının gönderilmesi zorunludur.
+      </p>
+
+      <h3>Rol Bazlı Erişim Özeti</h3>
+      <table class="role-table">
+        <thead>
+          <tr>
+            <th>Endpoint Grubu</th>
+            <th>Saha Personeli</th>
+            <th>Yönetici</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Authentication</td>
+            <td class="tag-allowed">✔</td>
+            <td class="tag-allowed">✔</td>
+          </tr>
+          <tr>
+            <td>Kendi Kayıtları</td>
+            <td class="tag-allowed">✔ (POST /entries, GET /entries/my, summary)</td>
+            <td class="tag-allowed">✔</td>
+          </tr>
+          <tr>
+            <td>Tüm Kayıtlar</td>
+            <td class="tag-denied">✖</td>
+            <td class="tag-allowed">✔</td>
+          </tr>
+          <tr>
+            <td>Raporlar</td>
+            <td class="tag-denied">✖</td>
+            <td class="tag-allowed">✔</td>
+          </tr>
+          <tr>
+            <td>Kullanıcı Yönetimi</td>
+            <td class="tag-denied">✖</td>
+            <td class="tag-allowed">✔ (GET /users)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- AUTH LOGIN -->
+    <section id="auth-login">
+      <h2>
+        <span class="material-symbols-outlined">login</span>
+        POST /api/auth/login
+        <span class="badge badge-post">POST</span>
+      </h2>
+      <div class="endpoint-meta">
+        Giriş işlemi. Başarılı olduğunda GUID tabanlı token ve rol bilgisi döner.
+      </div>
+
+      <h3>Request Body</h3>
+      <pre>{
+  "username": "ahmet.yilmaz",
+  "password": "123456"
+}</pre>
+
+      <h3>Response 200 – Saha Personeli Örneği</h3>
+      <pre>{
+  "token": "9ecf3ba1-8e3c-4f21-90d5-83c8b46291e2",
+  "user": {
+    "id": 7,
+    "fullName": "Ahmet Yılmaz",
+    "role": "Personel",
+    "rights": [
+      "CreateEntry",
+      "MyEntries",
+      "MySummary"
+    ]
+  },
+  "expiresAt": "2025-12-31T23:59:59Z"
+}</pre>
+
+      <h3>Response 200 – Yönetici Örneği</h3>
+      <pre>{
+  "token": "5bd03d5d-1f2b-42fe-b5a6-31b3f043a9a1",
+  "user": {
+    "id": 1,
+    "fullName": "Mehmet Kaya",
+    "role": "Admin",
+    "rights": [
+      "AllEntries",
+      "Reports",
+      "UserList"
+    ]
+  },
+  "expiresAt": "2025-12-31T23:59:59Z"
+}</pre>
+    </section>
+
+    <!-- AUTH ME -->
+    <section id="auth-me">
+      <h2>
+        <span class="material-symbols-outlined">person</span>
+        GET /api/auth/me
+        <span class="badge badge-get">GET</span>
+      </h2>
+      <div class="endpoint-meta">
+        Aktif token'a göre kullanıcı bilgisini ve haklarını döndürür.
+      </div>
+
+      <h3>Request</h3>
+      <pre>GET /api/auth/me
+Authorization: Bearer &lt;token&gt;</pre>
+
+      <h3>Response 200</h3>
+      <pre>{
+  "id": 7,
+  "fullName": "Ahmet Yılmaz",
+  "role": "Personel",
+  "rights": [
+    "CreateEntry",
+    "MyEntries",
+    "MySummary"
+  ]
+}</pre>
+    </section>
+
+    <!-- PERSONEL ENTRIES -->
+    <section id="entries-create">
+      <h2>
+        <span class="material-symbols-outlined">add_circle</span>
+        POST /api/entries
+        <span class="badge badge-post">POST</span>
+        <span class="badge badge-role-personel">Personel</span>
+      </h2>
+      <div class="endpoint-meta">
+        Saha personelinin yeni plaka kaydı oluşturmasını sağlar.
+      </div>
+
+      <h3>Request Body</h3>
+      <pre>{
+  "plate": "38ABC123",
+  "method": "Manual",      // "Manual" veya "Camera"
+  "entryType": "IN"        // İsteğe bağlı, giriş/çıkış tipi
+}</pre>
+
+      <h3>Response 201 – Created</h3>
+      <pre>{
+  "id": 145,
+  "plate": "38ABC123",
+  "method": "Manual",
+  "entryType": "IN",
+  "capturedAt": "2025-11-26T18:30:00Z",
+  "officerId": 7
+}</pre>
+    </section>
+
+    <section id="entries-my">
+      <h2>
+        <span class="material-symbols-outlined">history</span>
+        GET /api/entries/my
+        <span class="badge badge-get">GET</span>
+        <span class="badge badge-role-personel">Personel</span>
+      </h2>
+      <div class="endpoint-meta">
+        Giriş yapan personelin kendi geçmiş kayıtlarını döndürür.
+        Arayüzdeki “Geçmiş Kayıtlarım” modalı bu endpoint'i kullanır.
+      </div>
+
+      <h3>Request</h3>
+      <pre>GET /api/entries/my
+Authorization: Bearer &lt;token&gt;</pre>
+
+      <h3>Response 200</h3>
+      <pre>[
+  {
+    "id": 145,
+    "plate": "25EDC345",
+    "capturedAt": "2025-11-26T16:35:00Z",
+    "method": "Manual"
+  },
+  {
+    "id": 146,
+    "plate": "34ABC123",
+    "capturedAt": "2025-11-26T16:50:00Z",
+    "method": "Camera"
+  }
+]</pre>
+    </section>
+
+    <section id="entries-summary">
+      <h2>
+        <span class="material-symbols-outlined">monitoring</span>
+        GET /api/entries/my-summary
+        <span class="badge badge-get">GET</span>
+        <span class="badge badge-role-personel">Personel</span>
+      </h2>
+      <div class="endpoint-meta">
+        Bugünkü kayıt sayısı, çalışma süresi ve günlük hedef ilerlemesini özet olarak döndürür.
+        “Bugünkü Kayıtlarım”, “Çalışma Süresi” ve “Günlük Hedef İlerlemesi” kartları bu veriyi kullanır.
+      </div>
+
+      <h3>Response 200</h3>
+      <pre>{
+  "date": "2025-11-26",
+  "totalEntriesToday": 12,
+  "workTimeSeconds": 4523,
+  "dailyTarget": 50,
+  "targetProgress": 0.24
+}</pre>
+    </section>
+
+    <!-- ADMIN ENTRIES -->
+    <section id="entries-all">
+      <h2>
+        <span class="material-symbols-outlined">list_alt</span>
+        GET /api/entries
+        <span class="badge badge-get">GET</span>
+        <span class="badge badge-role-admin">Admin</span>
+      </h2>
+      <div class="endpoint-meta">
+        Yönetici için tüm plaka kayıtlarını listeler. Filtreleme için sorgu parametreleri kullanılabilir.
+      </div>
+
+      <h3>Request (Örnek)</h3>
+      <pre>GET /api/entries?plate=38ABC123&amp;officer=Ahmet&amp;dateFrom=2025-11-01&amp;dateTo=2025-11-30
+Authorization: Bearer &lt;token&gt;</pre>
+
+      <h3>Response 200</h3>
+      <pre>[
+  {
+    "id": 145,
+    "plate": "25EDC345",
+    "capturedAt": "2025-11-26T16:35:00Z",
+    "method": "Manual",
+    "officerName": "Ahmet Yılmaz"
+  },
+  {
+    "id": 146,
+    "plate": "34ABC123",
+    "capturedAt": "2025-11-25T08:30:00Z",
+    "method": "Camera",
+    "officerName": "Ahmet Yılmaz"
+  }
+]</pre>
+    </section>
+
+    <section id="entries-id">
+      <h2>
+        <span class="material-symbols-outlined">search</span>
+        GET /api/entries/{id}
+        <span class="badge badge-get">GET</span>
+        <span class="badge badge-role-admin">Admin</span>
+      </h2>
+      <div class="endpoint-meta">
+        Belirli bir plaka kaydının detayını döndürür. Liste ekranındaki “Detay” butonu bu endpoint'i çağırır.
+      </div>
+
+      <h3>Response 200</h3>
+      <pre>{
+  "id": 145,
+  "plate": "25EDC345",
+  "capturedAt": "2025-11-26T16:35:00Z",
+  "method": "Manual",
+  "officerName": "Ahmet Yılmaz",
+  "imageUrl": "https://.../plate_145.jpg"
+}</pre>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="reports-summary">
+      <h2>
+        <span class="material-symbols-outlined">insights</span>
+        GET /api/reports/entries-summary
+        <span class="badge badge-get">GET</span>
+        <span class="badge badge-role-admin">Admin</span>
+      </h2>
+      <div class="endpoint-meta">
+        Yönetici dashboard'unda gösterilen “Toplam Kayıt”, “Bugün” ve “Son 7 Gün” kartları için özet veriyi döndürür.
+      </div>
+    </section>
+
+    <section id="reports-date">
+      <h2>
+        <span class="material-symbols-outlined">calendar_month</span>
+        GET /api/reports/entries-by-date
+        <span class="badge badge-get">GET</span>
+        <span class="badge badge-role-admin">Admin</span>
+      </h2>
+      <div class="endpoint-meta">
+        Tarih bazlı çizgi grafiği için gün/gün kayıt sayılarını döndürür.
+      </div>
+    </section>
+
+    <section id="reports-officer">
+      <h2>
+        <span class="material-symbols-outlined">group</span>
+        GET /api/reports/entries-by-officer
+        <span class="badge badge-get">GET</span>
+        <span class="badge badge-role-admin">Admin</span>
+      </h2>
+      <div class="endpoint-meta">
+        Personel bazlı sütun grafiğinde kullanılan, her personelin toplam kayıt sayısını döndürür.
+      </div>
+    </section>
+
+    <section id="reports-method">
+      <h2>
+        <span class="material-symbols-outlined">camera_enhance</span>
+        GET /api/reports/entries-by-method
+        <span class="badge badge-get">GET</span>
+        <span class="badge badge-role-admin">Admin</span>
+      </h2>
+      <div class="endpoint-meta">
+        Kamera ile ve manuel girilen kayıtların dağılımını (pie chart) döndürür.
+      </div>
+    </section>
+
+    <!-- USERS -->
+    <section id="users">
+      <h2>
+        <span class="material-symbols-outlined">supervisor_account</span>
+        GET /api/users
+        <span class="badge badge-get">GET</span>
+        <span class="badge badge-role-admin">Admin</span>
+      </h2>
+      <div class="endpoint-meta">
+        Yönetici için kullanıcı listesini döndürür. Arayüzdeki “Personelleri Görüntüle” sayfası bu endpoint'i kullanır.
+      </div>
+    </section>
+
+    <!-- ERRORS HTTP -->
+    <section id="errors-http">
+      <h2>
+        <span class="material-symbols-outlined">error</span>
+        HTTP Status Codes
+      </h2>
+      <p>Sistemde kullanılan temel HTTP durum kodları:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Kod</th>
+            <th>Açıklama</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>200 OK</td><td>İstek başarıyla işlendi.</td></tr>
+          <tr><td>201 Created</td><td>Yeni kaynak oluşturuldu.</td></tr>
+          <tr><td>400 Bad Request</td><td>Geçersiz parametre veya gövde.</td></tr>
+          <tr><td>401 Unauthorized</td><td>Eksik veya geçersiz kimlik bilgisi.</td></tr>
+          <tr><td>403 Forbidden</td><td>Kullanıcının bu kaynağa erişim yetkisi yok.</td></tr>
+          <tr><td>404 Not Found</td><td>İstenen kaynak bulunamadı.</td></tr>
+          <tr><td>500 Internal Server Error</td><td>Sunucu tarafında beklenmeyen hata.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ERRORS CUSTOM -->
+    <section id="errors-custom">
+      <h2>
+        <span class="material-symbols-outlined">warning</span>
+        Custom Error Codes
+      </h2>
+      <p>İş kurallarına özel hata durumlarında dönebilecek örnek kodlar:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Kod</th>
+            <th>Anlamı</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>ERR_LOGIN_01</td><td>Kullanıcı bulunamadı.</td></tr>
+          <tr><td>ERR_LOGIN_02</td><td>Şifre hatalı.</td></tr>
+          <tr><td>ERR_LOGIN_03</td><td>Hesap pasif.</td></tr>
+          <tr><td>ERR_AUTH_01</td><td>Token süresi dolmuş.</td></tr>
+          <tr><td>ERR_ACCESS_01</td><td>Bu endpoint yalnızca admin rolü için geçerlidir.</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- ScrollSpy JS -->
+  <script>
+    const navLinks = document.querySelectorAll(".nav-link");
+    const sections = document.querySelectorAll("main section");
+
+    // Click ile ilgili bölüme smooth scroll
+    navLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        const targetId = link.getAttribute("data-target");
+        const target = document.getElementById(targetId);
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 70,
+            behavior: "smooth"
+          });
+        }
+      });
+    });
+
+    // ScrollSpy: hangi section ekranda ise o link aktif
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            navLinks.forEach(link => {
+              link.classList.toggle(
+                "active",
+                link.getAttribute("data-target") === id
+              );
+            });
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "0px 0px -60% 0px",
+        threshold: 0.2
+      }
+    );
+
+    sections.forEach(section => observer.observe(section));
+  </script>
+</body>
+</html>
